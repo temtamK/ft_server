@@ -42,4 +42,4 @@ EXPOSE 80 443
 CMD service nginx start && \
 	service mysql start && \
 	service php7.3-fpm start && \
-	sleep infinity
+	bash
