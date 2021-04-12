@@ -2,11 +2,14 @@ FROM debian:buster-slim
 
 LABEL maintainer = "Tae Min Kim <taemkim@student.42seoul.kr>"
 
+ENV AUTOINDEX 1
+
 RUN apt-get update && \
 	apt-get install -y nginx mariadb-server php-fpm php-mysql wget
 
-COPY srcs/wordpress /etc/nginx/sites-available/wordpress
-RUN ln -fs /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/default
+COPY srcs/run.sh ./
+COPY srcs/autoindex_on ./
+COPY srcs/autoindex_off ./
 
 RUN wget https://wordpress.org/latest.tar.gz && \
 	cp latest.tar.gz /var/www/html && rm latest.tar.gz && \
@@ -39,7 +42,5 @@ RUN chown -R www-data:www-data /var/www/* && \
 
 EXPOSE 80 443
 
-CMD service nginx start && \
-	service mysql start && \
-	service php7.3-fpm start && \
-	bash
+CMD bash run.sh
+
